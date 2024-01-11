@@ -1,0 +1,57 @@
+{
+  "name": "tailwind-extended-shadows",
+  "version": "0.0.1",
+  "description": "TailwindCSS plugin that adds utility classes to control box-shadow offsets + spread.",
+  "main": "dist/index",
+  "types": "dist/index.d.ts",
+  "exports": {
+    ".": {
+      "require": "./dist/index.js",
+      "import": "./dist/index.d.ts"
+    }
+  },
+  "scripts": {
+    "dev": "tsc -p tsconfig.json -w",
+    "build": "npm run build-ts",
+    "build-ts": "tsc -p tsconfig.json",
+    "clean": "rm -rf .turbo && rm -rf node_modules && rm -rf dist"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/kaelansmith/tailwind-extended-shadows.git"
+  },
+  "keywords": [
+    "tailwind",
+    "tailwindcss",
+    "tailwindCSS",
+    "shadow",
+    "box-shadow",
+    "offset",
+    "direction",
+    "spread"
+  ],
+  "author": "Kaelan Smith",
+  "license": "LGPL-3.0-only",
+  "bugs": {
+    "url": "https://github.com/kaelansmith/tailwind-extended-shadows/issues"
+  },
+  "homepage": "https://github.com/kaelansmith/tailwind-extended-shadows#readme",
+  "devDependencies": {
+    "@types/node": "^18.18.1",
+    "tailwindcss": "^3.3.3",
+    "tsc-watch": "^5.0.3",
+    "typescript": "^5.3.2"
+  },
+  "peerDependencies": {
+    "tailwindcss": ">=3.0.0",
+    "tailwind-merge": ">=2.2.0"
+  },
+  "peerDependenciesMeta": {
+    "tailwind-merge": {
+      "optional": true
+    }
+  },
+  "publishConfig": {
+    "access": "public"
+  }
+}

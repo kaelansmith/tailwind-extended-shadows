@@ -1,25 +1,27 @@
-# tailwind-extended-shadows
+# Tailwind Extended Shadows
 
-A TailwindCSS plugin that adds extra box-shadow utility classes, providing you with fine-grain control over:
+A TailwindCSS plugin that gives you fine-grain control over your box-shadows via simple utility classes (including magic utilities for auto-generating beautifully layered/stacked shadows).
 
-### 1. Box-shadow **`x` & `y` offsets**
+**Visual Demo Playground:** https://play.tailwindcss.com/Wk1G8cIkr3
+
+### 1. Control box-shadow **`x` & `y` offsets**
+
+**Class Syntax**: `shadow-{x|y}-{theme.spacing}`
 
 **Description**: Shifts the shadow's position in the direction you specify
 
-**Syntax**: `shadow-{t|r|b|l}-{theme.spacing}`
-
 **Examples**:
 
-- `shadow-t` (pulls shadow upwards by `theme.spacing.1` units),
-- `shadow-b-2` (pulls shadow downwards by `theme.spacing.2` units),
-- `shadow-l-3` (pulls shadow to the left by `theme.spacing.3` units),
-- `shadow-r-[3px]` (pulls shadow to the right by `3px` via arbitrary values syntax)
+- `shadow-y` (pulls shadow downwards by `theme.spacing.1` units),
+- `-shadow-y-2` (pulls shadow upwards by `theme.spacing.2` units),
+- `shadow-x-3` (pulls shadow to the right by `theme.spacing.3` units),
+- `-shadow-x-[3px]` (pulls shadow to the left by `3px` via arbitrary values syntax)
 
-### 2. Box-shadow **`spread`**
+### 2. Control box-shadow **`spread`**
+
+**Class Syntax**: `shadow-spread-{theme.spacing}`
 
 **Description**: Expands or contracts the shadow surface area omnidirectionally
-
-**Syntax**: `shadow-spread-{theme.spacing}`
 
 **Examples**:
 
@@ -28,11 +30,59 @@ A TailwindCSS plugin that adds extra box-shadow utility classes, providing you w
 - `-shadow-spread-3` (contracts the shadow by `theme.spacing.3` units),
 - `-shadow-spread-[3px]` (contracts the shadow by `3px` via arbitrary values syntax)
 
-**Note:** Tailwind's built-in `shadow-{size}` classes continue to work as is, applying their own default offset + spread values. When present, these new offset/spread classes simply override those defaults, and `shadow-{size}` ends up only controlling the shadow `blur` value.
+---
+
+**Note:** Tailwind's built-in `shadow-{size}` classes continue to work as is, applying their own default offset + spread values. When present, the new offset/spread classes simply override those defaults, and `shadow-{size}` ends up only controlling the shadow `blur` value. You also continue to control shadow color with the built-in `shadow-{color}/{opacity}` classes.
+
+## Shadow layering/stacking
+
+Tailwind Extended Shadows provides a few utility classes to auto-generate shadow "layers" (i.e. shadows stacked on top of each other); layering shadows can help you achieve more realistic, smooth, and/or sharp shadows -- [here's a good article](https://tobiasahlin.com/blog/layered-smooth-box-shadows/) that demonstrates its power.
+
+### 1. Control the number of layers
+
+**Class Syntax**: `shadows-{2-8}`
+
+**Description**: Auto-generates the number of shadow layers specified (between 2 and 8). You must specify a "base" shadow using the built-in Tailwind shadow classes (and optionally using the `offset`/`spread` utilities described above); the additional shadow layers will be auto-generated based on the "base" shadow (with pure CSS, thanks to a combination of CSS custom properties + `calc()`).
+
+### 2. Control how the layers "scale"
+
+**Class Syntax**: `shadows-scale-{1-5, increments of 0.25}`
+
+**Description**: By default, each generated layer uses the same `x`/`y`/`blur`/`spread` values as the "base" shadow -- i.e. the base shadow is simply repeated on top of itself, which isn't usually ideal. The `shadows-scale-*` utility provides a way to specify a "multiplier" to generate each layer's `x`/`y`/`blur` in a way that scales from smallest to biggest (note: `spread` stays the same across all layers, as scaling this value is almost never desirable in my experience).
+
+**Examples**:
+
+- `shadows-scale-2` -- multiplies the base `x`/`y`/`blur` values by `2` to the power of the current layer number; example output:
+
+```js
+// using layer utilities "shadows-5 shadows-scale-2":
+0px 1px 1px 0px rgb(0 0 0 / 0.1) // base values
+0px 2px 2px 0px rgb(0 0 0 / 0.1) // base values * 2^1
+0px 4px 4px 0px rgb(0 0 0 / 0.1) // base values * 2^2
+0px 8px 8px 0px rgb(0 0 0 / 0.1) // base values * 2^3
+0px 16px 16px 0px rgb(0 0 0 / 0.1) // base values * 2^4
+```
+
+### 3. Specify easing function to adjust how layers "scale"
+
+**Class Syntax**: `shadows-ease-{in,out}`
+
+**Description**: In addition to `shadows-scale-*`, you can specify an easing function to inject into the scaling math. This allows the shadow layers to scale in a more fluid/less linear way. Currently only supports "quadratic" easing (due to limitations in CSS' ability to do complex math).
+
+**Examples**:
+
+- `shadows-ease-in` -- scales the shadow layers starting slowly and accelerating towards the end.
+- `shadows-ease-out` -- scales the shadow layers starting fast and decelerating towards the end.
+
+### Layering Tips
+
+- Adding layers darkens your shadows -- to counteract this, reduce your base shadow color opacity
+- Because layer scaling is based on the "base" shadow values, you'll usually want to keep your base shadow values on the small side; i.e. use `shadow-sm` rather than `shadow-xl` when pairing it with `shadows-{2-8}`
+- Sometimes there's no visible difference when applying the `shadows-ease-{in,out}` classes; their effect becomes more apparent when using higher base offset/blur and/or scaling values
 
 ## Playground
 
-Use the following Tailwind Playground to quickly test out these new shadow classes in real-time: https://play.tailwindcss.com/9X5nqVNd1d
+Use the following Tailwind Playground to quickly test out these new shadow classes in real-time: https://play.tailwindcss.com/Wk1G8cIkr3
 
 ## CSS Output:
 

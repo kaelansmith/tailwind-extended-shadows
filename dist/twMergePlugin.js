@@ -6,19 +6,13 @@ export const withExtendedShadows = (prevConfig) => {
                 // x-axis shadow offsets
                 "extendedShadows.offset-x": [
                     {
-                        "shadow-l": ["", validators.isNumber, validators.isArbitraryLength],
-                    },
-                    {
-                        "shadow-r": ["", validators.isNumber, validators.isArbitraryLength],
+                        "shadow-x": ["", validators.isNumber, validators.isArbitraryLength],
                     },
                 ],
                 // y-axis shadow offsets
                 "extendedShadows.offset-y": [
                     {
-                        "shadow-t": ["", validators.isNumber, validators.isArbitraryLength],
-                    },
-                    {
-                        "shadow-b": ["", validators.isNumber, validators.isArbitraryLength],
+                        "shadow-y": ["", validators.isNumber, validators.isArbitraryLength],
                     },
                 ],
                 // shadow spread
@@ -29,6 +23,24 @@ export const withExtendedShadows = (prevConfig) => {
                             validators.isNumber,
                             validators.isArbitraryLength,
                         ],
+                    },
+                ],
+                // shadows (layers)
+                "extendedShadows.shadows": [
+                    {
+                        shadows: [validators.isInteger],
+                    },
+                ],
+                // shadows scale multiplier
+                "extendedShadows.shadows-scale": [
+                    {
+                        "shadows-scale": [validators.isNumber],
+                    },
+                ],
+                // shadows easings
+                "extendedShadows.shadows-ease": [
+                    {
+                        "shadows-ease": ["in", "out"],
                     },
                 ],
             },

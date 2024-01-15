@@ -3,7 +3,9 @@ import { type Config, mergeConfigs, validators } from "tailwind-merge";
 type GroupIds =
   | "extendedShadows.offset-x"
   | "extendedShadows.offset-y"
+  | "extendedShadows.blur"
   | "extendedShadows.spread"
+  | "extendedShadows.opacity"
   | "extendedShadows.shadows"
   | "extendedShadows.shadows-scale"
   | "extendedShadows.shadows-ease";
@@ -17,22 +19,49 @@ export const withExtendedShadows = (
         // x-axis shadow offsets
         "extendedShadows.offset-x": [
           {
-            "shadow-x": ["", validators.isNumber, validators.isArbitraryLength],
+            "shadow-x": [
+              "px",
+              validators.isNumber,
+              validators.isArbitraryLength,
+            ],
           },
         ],
         // y-axis shadow offsets
         "extendedShadows.offset-y": [
           {
-            "shadow-y": ["", validators.isNumber, validators.isArbitraryLength],
+            "shadow-y": [
+              "px",
+              validators.isNumber,
+              validators.isArbitraryLength,
+            ],
+          },
+        ],
+        // shadow blur
+        "extendedShadows.blur": [
+          {
+            "shadow-blur": [
+              "px",
+              validators.isNumber,
+              validators.isArbitraryLength,
+            ],
           },
         ],
         // shadow spread
         "extendedShadows.spread": [
           {
             "shadow-spread": [
-              "",
+              "px",
               validators.isNumber,
               validators.isArbitraryLength,
+            ],
+          },
+        ],
+        // shadow opacity
+        "extendedShadows.opacity": [
+          {
+            "shadow-opacity": [
+              validators.isInteger,
+              validators.isArbitraryNumber,
             ],
           },
         ],

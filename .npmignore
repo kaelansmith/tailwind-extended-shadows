@@ -1,4 +1,5 @@
 /src
+/playground
 tsconfig.json
 .vscode
 experiment.ts

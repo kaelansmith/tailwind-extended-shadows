@@ -1,0 +1,184 @@
+<div class="flex min-h-screen flex-col items-center justify-center bg-slate-100 py-10 px-6 md:px-10">
+  <div class="mx-auto mb-20 flex max-w-xl flex-col items-center text-center">
+    <h1>Tailwind Extended Shadows</h1>
+    <p class="text-slate-600">Try adjusting the extra shadow utility classes on the cards below to see what's possible.
+      Learn more about <strong>tailwind-extended-shadows</strong> below:</p>
+    <button
+      class="shadow-b-1.5 mt-6 rounded-md border border-slate-900/5 bg-slate-900 px-4 py-2 text-sm font-semibold text-slate-100 shadow-sm"><a
+        href="https://github.com/kaelansmith/tailwind-extended-shadows" target="_blank">Learn more</a></button>
+  </div>
+
+  <!-- Adjust new shadow classes on divs below: -->
+  <h2>Controlling Offset</h2>
+  <div class="dark card-grid">
+    <div class="card shadow-slate-900/15 shadow-lg">
+      <h3>
+        <div class="w-full">Default:</div>
+        <pre>shadow-lg</pre>
+      </h3>
+    </div>
+
+    <div class="card shadow-slate-900/15 shadow-lg shadow-y-5">
+      <h3>
+        <pre>shadow-lg</pre>
+        <pre>shadow-y-5</pre>
+      </h3>
+    </div>
+
+    <div class="card shadow-slate-900/15 shadow-lg shadow-x-2 shadow-y-5">
+      <h3>
+        <pre>shadow-lg</pre>
+        <pre>shadow-y-5</pre>
+        <pre>shadow-x-2</pre>
+      </h3>
+    </div>
+  </div>
+
+  <h2>Controlling Spread</h2>
+  <div class="card-grid">
+    <div class="card shadow-slate-900/15 shadow-lg">
+      <h3>
+        <div class="w-full">Default:</div>
+        <pre>shadow-lg</pre>
+      </h3>
+    </div>
+
+    <div class="card shadow-slate-900/15 shadow-lg -shadow-spread-2">
+      <h3>
+        <pre>shadow-lg</pre>
+        <pre>-shadow-spread-2</pre>
+      </h3>
+    </div>
+
+    <div class="card shadow-slate-900/15 shadow-lg shadow-spread-2">
+      <h3>
+        <pre>shadow-lg</pre>
+        <pre>shadow-spread-2</pre>
+      </h3>
+    </div>
+  </div>
+
+  <h2>Controlling Layers</h2>
+  <div class="card-grid mb-6">
+    <div class="card shadow-slate-900/15 shadow-lg">
+      <h3>
+        <div class="w-full">Default:</div>
+        <pre>shadow-lg</pre>
+      </h3>
+    </div>
+
+    <div class="card shadow-slate-900/15 shadow-lg shadows-4">
+      <h3>
+        <pre>shadow-lg</pre>
+        <pre>shadows-4</pre>
+      </h3>
+    </div>
+
+    <div class="card shadow-slate-900/15 shadow-lg shadows-8">
+      <h3>
+        <pre>shadow-lg</pre>
+        <pre>shadows-8</pre>
+      </h3>
+    </div>
+  </div>
+
+  <p class="text-center max-w-md text-slate-700 mb-6">Note how adding layers darkens shadows; you typically want to
+    counter-act this by reducing base-layer opacity:</p>
+  <div class="card-grid">
+    <div class="card shadow-slate-900/15 shadow-lg">
+      <h3>
+        <div class="w-full">Default:</div>
+        <pre>shadow-lg</pre>
+      </h3>
+    </div>
+
+    <div class="card shadow-slate-900/15 shadow-lg shadows-4 shadow-opacity-10">
+      <h3>
+        <pre>shadow-lg</pre>
+        <pre>shadows-4</pre>
+        <pre>shadow-opacity-10</pre>
+      </h3>
+    </div>
+
+    <div class="card shadow-slate-900/15 shadow-lg shadows-8 shadow-opacity-5">
+      <h3>
+        <pre>shadow-lg</pre>
+        <pre>shadows-8</pre>
+        <pre>shadow-opacity-5</pre>
+      </h3>
+    </div>
+  </div>
+
+
+  <h2 class="mb-3">Apply Layer Scaling</h2>
+  <p class="text-center max-w-md text-slate-700 mb-6">Note how adding layers and reducing opacity doesn't really change
+    anything -- this is where layer scaling comes in:</p>
+  <div class="card-grid">
+    <div class="card shadow-slate-900/15 shadow-lg">
+      <h3>
+        <div class="w-full">Default:</div>
+        <pre>shadow-lg</pre>
+
+      </h3>
+    </div>
+
+    <div class="card shadow-slate-900/15 shadow-sm shadow-opacity-5 shadows-4 shadow-y-[3px] shadows-scale-3">
+      <h3>
+        <pre>shadow-sm</pre>
+        <pre>shadows-4</pre>
+        <pre>shadow-opacity-5</pre>
+        <pre>shadow-y-[3px]</pre>
+        <pre>shadows-scale-3</pre>
+      </h3>
+    </div>
+
+    <div
+      class="card shadow-slate-900/15 shadow-sm shadow-opacity-5 shadows-7 shadow-y-[3px] -shadow-spread-[10px] shadows-scale-1.5">
+      <h3>
+        <pre>shadow-sm</pre>
+        <pre>shadows-7</pre>
+        <pre>shadow-opacity-5</pre>
+        <pre>shadow-y-[3px]</pre>
+        <pre>-shadow-spread-[10px]</pre>
+        <pre>shadows-scale-1.5</pre>
+      </h3>
+    </div>
+  </div>
+
+  <h2 class="mb-3">Apply Easing to Layer Scaling</h2>
+  <p class="text-center max-w-md text-slate-700 mb-6">Finally, you may want to apply easing for a more fluid/less linear
+    scaling effect.</p>
+  <div class="card-grid">
+    <div class="card shadow-slate-900/15 shadow-lg">
+      <h3>
+        <div class="w-full">Default:</div>
+        <pre>shadow-lg</pre>
+
+      </h3>
+    </div>
+
+    <div
+      class="card shadow-slate-900/15 shadow-sm shadow-opacity-5 shadows-4 shadow-y-[3px] shadows-scale-3 shadows-ease-in">
+      <h3>
+        <pre>shadow-sm</pre>
+        <pre>shadows-4</pre>
+        <pre>shadow-opacity-5</pre>
+        <pre>shadow-y-[3px]</pre>
+        <pre>shadows-scale-3</pre>
+        <pre>shadows-ease-in</pre>
+      </h3>
+    </div>
+
+    <div
+      class="card shadow-slate-900/15 shadow-sm shadow-opacity-5 shadows-4 shadow-y-[3px] shadows-scale-3 shadows-ease-out">
+      <h3>
+        <pre>shadow-sm</pre>
+        <pre>shadows-4</pre>
+        <pre>shadow-opacity-5</pre>
+        <pre>shadow-y-[3px]</pre>
+        <pre>shadows-scale-3</pre>
+        <pre>shadows-ease-out</pre>
+      </h3>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,29 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  pre {
+    @apply text-blue-800 bg-blue-50 py-0.5 px-2 leading-none tracking-tight rounded border border-blue-200 text-sm xl:text-base shadow-sm shadow-slate-900/20;
+  }
+
+  h1 {
+    @apply text-4xl font-bold text-slate-900 mb-4;
+  }
+
+  h2 {
+    @apply text-3xl font-semibold text-slate-900 mb-8;
+  }
+
+  h3 {
+    @apply flex flex-wrap gap-2 text-base md:text-lg font-semibold text-slate-800;
+  }
+
+  .card-grid {
+    @apply mb-20 grid grid-cols-3 gap-4 md:gap-6 w-full;
+  }
+
+  .card {
+    @apply p-4 md:p-6 max-w-sm rounded-md bg-white border min-h-56 border-slate-900/10;
+  }
+}

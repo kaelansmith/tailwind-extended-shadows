@@ -1,0 +1,1 @@
+This folder simply serves as a backup of the HTML + CSS in our Tailwind Playground, just in case it accidentally gets deleted/lost. This code isn't connected to the real playground in any way, just copy-pasted.

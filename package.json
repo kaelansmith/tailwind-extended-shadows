@@ -1,7 +1,7 @@
 {
   "name": "tailwind-extended-shadows",
   "version": "0.1.0",
-  "description": "TailwindCSS plugin that adds utility classes to control box-shadow offsets + spread.",
+  "description": "TailwindCSS utility classes for fine-grain control over box-shadows, including layers.",
   "main": "dist/index",
   "types": "dist/index.d.ts",
   "exports": {

@@ -1,3 +1,6 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.extendedShadowsPlugin = void 0;
 const plugin = require("tailwindcss/plugin");
 const flattenColorPalette = require("tailwindcss/lib/util/flattenColorPalette");
 const { parseColor } = require("tailwindcss/lib/util/color");
@@ -10,7 +13,7 @@ const shadowOpacityDefaultTheme = {};
 for (let i = 0; i <= 100; i += 5) {
     shadowOpacityDefaultTheme[i] = i.toString();
 }
-export const extendedShadowsPlugin = plugin(function ({ matchUtilities, theme }) {
+exports.extendedShadowsPlugin = plugin(function ({ matchUtilities, theme }) {
     /**
      * Helper that parses comma-separated box-shadow values into array of objects,
      * making it easy to loop over and extract x/y/blur/spread/color

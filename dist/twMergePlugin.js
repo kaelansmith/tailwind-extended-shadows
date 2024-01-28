@@ -1,6 +1,9 @@
-import { mergeConfigs, validators } from "tailwind-merge";
-export const withExtendedShadows = (prevConfig) => {
-    return mergeConfigs(prevConfig, {
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.withExtendedShadows = void 0;
+const tailwind_merge_1 = require("tailwind-merge");
+const withExtendedShadows = (prevConfig) => {
+    return (0, tailwind_merge_1.mergeConfigs)(prevConfig, {
         extend: {
             classGroups: {
                 // x-axis shadow offsets
@@ -8,8 +11,8 @@ export const withExtendedShadows = (prevConfig) => {
                     {
                         "shadow-x": [
                             "px",
-                            validators.isNumber,
-                            validators.isArbitraryLength,
+                            tailwind_merge_1.validators.isNumber,
+                            tailwind_merge_1.validators.isArbitraryLength,
                         ],
                     },
                 ],
@@ -18,8 +21,8 @@ export const withExtendedShadows = (prevConfig) => {
                     {
                         "shadow-y": [
                             "px",
-                            validators.isNumber,
-                            validators.isArbitraryLength,
+                            tailwind_merge_1.validators.isNumber,
+                            tailwind_merge_1.validators.isArbitraryLength,
                         ],
                     },
                 ],
@@ -28,8 +31,8 @@ export const withExtendedShadows = (prevConfig) => {
                     {
                         "shadow-blur": [
                             "px",
-                            validators.isNumber,
-                            validators.isArbitraryLength,
+                            tailwind_merge_1.validators.isNumber,
+                            tailwind_merge_1.validators.isArbitraryLength,
                         ],
                     },
                 ],
@@ -38,8 +41,8 @@ export const withExtendedShadows = (prevConfig) => {
                     {
                         "shadow-spread": [
                             "px",
-                            validators.isNumber,
-                            validators.isArbitraryLength,
+                            tailwind_merge_1.validators.isNumber,
+                            tailwind_merge_1.validators.isArbitraryLength,
                         ],
                     },
                 ],
@@ -47,21 +50,21 @@ export const withExtendedShadows = (prevConfig) => {
                 "extendedShadows.opacity": [
                     {
                         "shadow-opacity": [
-                            validators.isInteger,
-                            validators.isArbitraryNumber,
+                            tailwind_merge_1.validators.isInteger,
+                            tailwind_merge_1.validators.isArbitraryNumber,
                         ],
                     },
                 ],
                 // shadows (layers)
                 "extendedShadows.shadows": [
                     {
-                        shadows: [validators.isInteger],
+                        shadows: [tailwind_merge_1.validators.isInteger],
                     },
                 ],
                 // shadows scale multiplier
                 "extendedShadows.shadows-scale": [
                     {
-                        "shadows-scale": [validators.isNumber],
+                        "shadows-scale": [tailwind_merge_1.validators.isNumber],
                     },
                 ],
                 // shadows easings
@@ -74,3 +77,4 @@ export const withExtendedShadows = (prevConfig) => {
         },
     });
 };
+exports.withExtendedShadows = withExtendedShadows;

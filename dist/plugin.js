@@ -2,8 +2,13 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.extendedShadowsPlugin = void 0;
 const plugin = require("tailwindcss/plugin");
-const flattenColorPalette = require("tailwindcss/lib/util/flattenColorPalette");
+// @ts-ignore
+const flattenColorPaletteImport = require("tailwindcss/lib/util/flattenColorPalette");
 const { parseColor } = require("tailwindcss/lib/util/color");
+const { importDefault } = require("./helpers");
+// Tailwind Play will import these internal imports as ES6 imports, while most
+// other workflows will import them as CommonJS imports.
+const flattenColorPalette = importDefault(flattenColorPaletteImport);
 // Note: we purposely keep all plugin code in one file to make it easy to copy/paste between Tailwind Playground (which serves as a nice dev/testing environment)
 const shadowScaleDefaultTheme = {};
 for (let i = 1; i <= 5; i += 0.25) {

@@ -1,6 +1,6 @@
 {
   "name": "tailwind-extended-shadows",
-  "version": "0.3.1",
+  "version": "0.4.0",
   "description": "TailwindCSS utility classes for fine-grain control over box-shadows, including layers.",
   "main": "dist/index",
   "types": "dist/index.d.ts",

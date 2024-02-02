@@ -468,11 +468,11 @@ module.exports = {
 
 ### `tailwind-merge` compatibility plugin
 
-If you're using the wonderful `tailwind-merge` package to take care of removing conflicting Tailwind classes at runtime, make sure to use our `withExtendedShadows` compatibility plugin; otherwise, the extra shadow utility classes will be considered conflicting and will get stripped out when they shouldn't.
+If you're using the wonderful `tailwind-merge` package to take care of removing conflicting Tailwind classes at runtime, make sure to use our `withExtendedShadows` compatibility plugin from the separate [`tailwind-extended-shadows-merge`](https://github.com/kaelansmith/tailwind-extended-shadows-merge) package; otherwise, the extra shadow utility classes will be considered conflicting and will get stripped out when they shouldn't.
 
 ```js
 import { extendTailwindMerge } from "tailwind-merge";
-import { withExtendedShadows } from "tailwind-extended-shadows";
+import { withExtendedShadows } from "tailwind-extended-shadows-merge";
 
 export const twMerge = extendTailwindMerge(withExtendedShadows);
 ```

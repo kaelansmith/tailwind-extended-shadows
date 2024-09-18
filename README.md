@@ -4,6 +4,22 @@ A TailwindCSS plugin that gives you fine-grain control over your box-shadows via
 
 **Visual Demo Playground:** https://play.tailwindcss.com/6rFqo93e6h
 
+## Table of Contents
+
+- [Usage](#usage)
+  - [1. Shadow x & y offsets](#1-control-box-shadow-x--y-offsets)
+  - [2. Shadow blur](#2-control-box-shadow-blur)
+  - [3. Shadow spread](#3-control-box-shadow-spread)
+  - [4. Shadow opacity](#4-control-box-shadow-opacity)
+  - [5. Shadow layering/stacking](#shadow-layeringstacking)
+    - [Control the number of layers](#1-control-the-number-of-layers)
+    - [Control how the layers "scale"](#2-control-how-the-layers-scale)
+    - [Control easing of layer scaling](#3-apply-easing-function-to-adjust-how-layers-scale)
+    - [Layering Tips](#layering-tips)
+- [CSS Output](#css-output)
+- [Installation](#install)
+  - [tailwind-merge compatibility plugin](#tailwind-merge-compatibility-plugin)
+
 ## Usage
 
 ### 1. Control box-shadow **`x` & `y` offsets**

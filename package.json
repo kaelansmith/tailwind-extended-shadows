@@ -11,7 +11,7 @@
     }
   },
   "scripts": {
-    "dev": "tsc -p tsconfig.json -w",
+    "dev": "tsc -p tsconfig.json -w --preserveWatchOutput",
     "build": "npm run build-ts",
     "build-ts": "tsc -p tsconfig.json",
     "clean": "rm -rf .turbo && rm -rf node_modules && rm -rf dist"

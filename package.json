@@ -7,14 +7,16 @@
   "exports": {
     ".": {
       "require": "./dist/index.js",
-      "import": "./dist/index.d.ts"
+      "import": "./dist/index.js",
+      "types": "./dist/index.d.ts"
     }
   },
   "scripts": {
     "dev": "tsc -p tsconfig.json -w --preserveWatchOutput",
     "build": "npm run build-ts",
     "build-ts": "tsc -p tsconfig.json",
-    "clean": "rm -rf .turbo && rm -rf node_modules && rm -rf dist"
+    "clean": "rm -rf .turbo && rm -rf dist && npm run clean:modules",
+    "clean:modules": "rm -rf node_modules"
   },
   "repository": {
     "type": "git",

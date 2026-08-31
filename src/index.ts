@@ -1,8 +1,5 @@
-export { extendedShadowsPlugin as default } from "./plugin";
-// const { withExtendedShadows } = require("./twMergePlugin");
-// const { extendedShadowsPlugin } = require("./plugin");
+import { extendedShadowsPlugin } from "./plugin";
 
-// module.exports = {
-//   extendedShadowsPlugin,
-//   withExtendedShadows,
-// };
+// CJS `require("tailwind-extended-shadows")` must return the plugin function
+// directly (project configs use require()). `export =` compiles to module.exports.
+export = extendedShadowsPlugin;

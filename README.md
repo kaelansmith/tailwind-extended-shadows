@@ -16,9 +16,11 @@ A TailwindCSS plugin that gives you fine-grain control over your box-shadows via
     - [Control how the layers "scale"](#2-control-how-the-layers-scale)
     - [Control easing of layer scaling](#3-apply-easing-function-to-adjust-how-layers-scale)
     - [Layering Tips](#layering-tips)
+  - [6. Inset shadows](#6-inset-shadows)
 - [CSS Output](#css-output)
 - [Installation](#install)
   - [tailwind-merge compatibility plugin](#tailwind-merge-compatibility-plugin)
+- [Testing](#testing)
 
 ## Usage
 
@@ -205,6 +207,80 @@ module.exports = {
 
 > [!NOTE]  
 > Tailwind's built-in `shadow-{size}` classes continue to work as is, applying their own default offset + blur + spread values. When present, the new offset/blur/spread classes simply override those defaults. A `shadow-{size}` class is actually still required to be used alongside the offset/blur/spread classes, otherwise the `box-shadow` property won't be set.
+
+## 6. Inset shadows
+
+Every outer-shadow utility in this plugin has an inset counterpart under the **Tailwind v4-aligned** `inset-shadow-*` / `inset-shadows-*` prefixes. These write to Tailwind's `--tw-inset-shadow` slot (and parallel `--tw-inset-shadow-*` CSS variables), so they compose cleanly alongside outer `shadow-*` utilities — and the naming matches v4 so a future v4 compat path can reuse the same class names.
+
+This package also **polyfills** Tailwind v4's inset size + color utilities for Tailwind v3 projects.
+
+| Outer | Inset (v4-aligned) |
+| --- | --- |
+| `shadow-{size}` | `inset-shadow` / `inset-shadow-{2xs\|xs\|sm}` / `inset-shadow-none` |
+| `shadow-{color}` | `inset-shadow-{color}` |
+| `shadow-x-*` / `shadow-y-*` | `inset-shadow-x-*` / `inset-shadow-y-*` |
+| `shadow-blur-*` | `inset-shadow-blur-*` |
+| `shadow-spread-*` | `inset-shadow-spread-*` |
+| `shadow-opacity-*` | `inset-shadow-opacity-*` |
+| `shadows-{n}` | `inset-shadows-{n}` |
+| `shadows-scale-*` | `inset-shadows-scale-*` |
+| `shadows-ease-{in,out}` | `inset-shadows-ease-{in,out}` |
+
+**Base class**: an `inset-shadow-{size}` class is required (same pattern as needing `shadow-{size}` for outer utilities). Defaults:
+
+| Class | Geometry |
+| --- | --- |
+| `inset-shadow` / `inset-shadow-sm` | `inset 0 2px 4px 0 …` (matches v3 `shadow-inner` / v4 `inset-shadow-sm`) |
+| `inset-shadow-2xs` | `inset 0 1px 0 0 …` (1px top-edge highlight) |
+| `inset-shadow-xs` | `inset 0 1px 1px 0 …` |
+| `inset-shadow-none` | clears the inset slot only |
+
+v3 `shadow-inner` is routed into the same `--tw-inset-shadow-*` variable stack. `shadow-none` clears the **outer** slot only; use `inset-shadow-none` to clear inset.
+
+**Configure sizes** via `tailwind.config.js` > `theme` > `extend` > `insetBoxShadow`.
+
+<details>
+ <summary>Default Theme Values:</summary>
+  `theme.insetBoxShadow` defaults to:
+
+```js
+module.exports = {
+  /* ... */
+  theme: {
+    insetBoxShadow: {
+      DEFAULT: "inset 0 2px 4px 0 rgb(0 0 0 / 0.05)",
+      "2xs": "inset 0 1px 0 0 rgb(0 0 0 / 0.05)",
+      xs: "inset 0 1px 1px 0 rgb(0 0 0 / 0.05)",
+      sm: "inset 0 2px 4px 0 rgb(0 0 0 / 0.05)",
+      none: "none",
+    },
+  },
+};
+```
+
+</details>
+
+**Examples**:
+
+```html
+<!-- Default inset shadow, nudged + recolored -->
+<div class="inset-shadow inset-shadow-y-1 inset-shadow-blur-2 inset-shadow-black/10"></div>
+
+<!-- 1px top-edge highlight (common UI pattern; replaces kit highlight-* ) -->
+<div class="inset-shadow-2xs inset-shadow-white/20"></div>
+
+<!-- Outer + inset together -->
+<div class="shadow-lg shadow-black/20 inset-shadow-sm inset-shadow-white/15"></div>
+
+<!-- Layered inset shadows -->
+<div
+  class="inset-shadow-sm inset-shadows-3 inset-shadows-scale-2 inset-shadows-ease-out inset-shadow-black/10"
+></div>
+```
+
+Offset, blur, spread, opacity, and layer theme scales are shared with the outer utilities (`theme.boxShadowOffset`, `boxShadowBlur`, `boxShadowSpread`, `boxShadowOpacity`, `boxShadowLayers`, `boxShadowLayersScale`). Colors use `theme.boxShadowColor`, same as `shadow-{color}`.
+
+> **Migration tip:** a kit-style `highlight-white/20` is equivalent to `inset-shadow-2xs inset-shadow-white/20`.
 
 ## Shadow layering/stacking
 
@@ -492,6 +568,19 @@ import { withExtendedShadows } from "tailwind-extended-shadows-merge";
 
 export const twMerge = extendTailwindMerge(withExtendedShadows);
 ```
+
+## Testing
+
+This package includes Vitest + PostCSS/Tailwind **v3** compile tests that assert generated CSS for both outer and inset utilities.
+
+From the package root:
+
+```bash
+npm test          # builds dist/, then runs vitest once
+npm run test:watch  # vitest in watch mode (run npm run build first if src changed)
+```
+
+Tests live in `tests/` and exercise the built CommonJS entry (`dist/index.js`).
 
 ---
 

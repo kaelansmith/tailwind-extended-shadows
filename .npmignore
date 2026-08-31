@@ -1,5 +1,8 @@
 /src
 /playground
+/tests
 tsconfig.json
+vitest.config.ts
 .vscode
 experiment.ts
+TODO.md

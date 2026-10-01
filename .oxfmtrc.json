@@ -1,0 +1,26 @@
+{
+  "printWidth": 80,
+  "tabWidth": 2,
+  "semi": true,
+  "sortPackageJson": false,
+  "ignorePatterns": [
+    "**/node_modules/**",
+    "**/vendor/**",
+    "**/dist/**",
+    "**/build/**",
+    "**/.next/**",
+    "**/.turbo/**",
+    "**/.vercel/**",
+    "**/coverage/**",
+    "**/*.tsbuildinfo",
+    "**/pnpm-lock.yaml",
+    "**/package-lock.json",
+    "**/yarn.lock",
+    "**/composer.lock",
+    "**/bun.lock",
+    "**/bun.lockb",
+    "**/next-env.d.ts",
+    "**/public/**",
+    "**/assets/**"
+  ]
+}

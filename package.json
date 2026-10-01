@@ -19,7 +19,9 @@
     "test:watch": "vitest",
     "clean": "rm -rf .turbo && rm -rf dist",
     "clean:modules": "rm -rf node_modules",
-    "typecheck": "tsc --noEmit -p tsconfig.json"
+    "typecheck": "tsc --noEmit -p tsconfig.json",
+    "format": "oxfmt --write .",
+    "format:check": "oxfmt --check ."
   },
   "repository": {
     "type": "git",
@@ -45,9 +47,9 @@
     "@types/node": "^18.19.130",
     "postcss": "^8.4.32",
     "tailwindcss": "^3.3.3",
-    "tsc-watch": "^5.0.3",
-    "typescript": "^5.3.2",
-    "vitest": "^2.1.0"
+    "typescript": "7.0.2",
+    "vitest": "^2.1.0",
+    "oxfmt": "0.71.0"
   },
   "peerDependencies": {
     "tailwindcss": ">=3.0.0"

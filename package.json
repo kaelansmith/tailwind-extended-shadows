@@ -42,7 +42,7 @@
   },
   "homepage": "https://github.com/kaelansmith/tailwind-extended-shadows#readme",
   "devDependencies": {
-    "@types/node": "^18.18.1",
+    "@types/node": "^18.19.130",
     "postcss": "^8.4.32",
     "tailwindcss": "^3.3.3",
     "tsc-watch": "^5.0.3",

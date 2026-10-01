@@ -16,7 +16,7 @@ describe("outer shadow utilities (regression)", () => {
         "box-shadow:",
         "var(--tw-inset-shadow",
         "var(--tw-shadow",
-      ])
+      ]),
     ).toBe(true);
     // Outer size must not write inset offset vars
     expect(rule!.includes("--tw-inset-shadow-x-offset")).toBe(false);
@@ -46,7 +46,9 @@ describe("outer shadow utilities (regression)", () => {
       content: `<div class="shadow-sm shadows-3 shadows-scale-2 shadows-ease-out"></div>`,
     });
     expect(getRule(css, "shadows-3")).toContain("--tw-shadow-layers");
-    expect(getRule(css, "shadows-scale-2")).toContain("--tw-shadows-multiplier");
+    expect(getRule(css, "shadows-scale-2")).toContain(
+      "--tw-shadows-multiplier",
+    );
     expect(css).toMatch(/\.shadows-3\.shadows-ease-out/);
   });
 

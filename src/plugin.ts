@@ -73,7 +73,7 @@ export const extendedShadowsPlugin = plugin(
         spread = spread ?? "0px";
 
         [x, y, blur, spread] = [x, y, blur, spread].map((value) =>
-          value === "0" ? "0px" : value
+          value === "0" ? "0px" : value,
         );
 
         shadows.push({ inset: Boolean(inset), x, y, blur, spread, color });
@@ -101,8 +101,8 @@ export const extendedShadowsPlugin = plugin(
       const color = isHexColor(value)
         ? `rgb(${toRGB(value)} / ${opacityValue})`
         : typeof value == "function"
-        ? value({ opacityValue }) // handle hsl values which are functions
-        : value;
+          ? value({ opacityValue }) // handle hsl values which are functions
+          : value;
 
       return { color, defaultOpacityValue };
     };
@@ -254,7 +254,7 @@ export const extendedShadowsPlugin = plugin(
       {
         values: shadowTheme,
         type: "shadow",
-      }
+      },
     );
 
     const themeShadowColors = theme("boxShadowColor");
@@ -265,7 +265,7 @@ export const extendedShadowsPlugin = plugin(
           const { color, defaultOpacityValue } = resolveShadowColor(
             value,
             modifier,
-            "--tw-shadow-opacity"
+            "--tw-shadow-opacity",
           );
 
           return {
@@ -280,7 +280,7 @@ export const extendedShadowsPlugin = plugin(
         values: flattenColorPalette(themeShadowColors),
         modifiers: "any",
         type: ["color"],
-      }
+      },
     );
 
     /**
@@ -319,7 +319,7 @@ export const extendedShadowsPlugin = plugin(
       },
       {
         values: layerValues,
-      }
+      },
     );
 
     /**
@@ -340,7 +340,7 @@ export const extendedShadowsPlugin = plugin(
       {
         values: offsetValues,
         supportsNegativeValues: true,
-      }
+      },
     );
 
     /**
@@ -357,7 +357,7 @@ export const extendedShadowsPlugin = plugin(
       },
       {
         values: blurValues,
-      }
+      },
     );
 
     /**
@@ -375,7 +375,7 @@ export const extendedShadowsPlugin = plugin(
       {
         values: spreadValues,
         supportsNegativeValues: true,
-      }
+      },
     );
 
     /**
@@ -392,7 +392,7 @@ export const extendedShadowsPlugin = plugin(
       },
       {
         values: opacityValues,
-      }
+      },
     );
 
     /**
@@ -410,7 +410,7 @@ export const extendedShadowsPlugin = plugin(
       {
         values: scaleValues,
         supportsNegativeValues: true,
-      }
+      },
     );
 
     /**
@@ -464,7 +464,7 @@ export const extendedShadowsPlugin = plugin(
       {
         values: insetShadowTheme,
         type: "shadow",
-      }
+      },
     );
 
     matchUtilities(
@@ -473,7 +473,7 @@ export const extendedShadowsPlugin = plugin(
           const { color, defaultOpacityValue } = resolveShadowColor(
             value,
             modifier,
-            "--tw-inset-shadow-opacity"
+            "--tw-inset-shadow-opacity",
           );
 
           return {
@@ -487,7 +487,7 @@ export const extendedShadowsPlugin = plugin(
         values: flattenColorPalette(themeShadowColors),
         modifiers: "any",
         type: ["color"],
-      }
+      },
     );
 
     matchUtilities(
@@ -520,7 +520,7 @@ export const extendedShadowsPlugin = plugin(
       },
       {
         values: layerValues,
-      }
+      },
     );
 
     matchUtilities(
@@ -535,7 +535,7 @@ export const extendedShadowsPlugin = plugin(
       {
         values: offsetValues,
         supportsNegativeValues: true,
-      }
+      },
     );
 
     matchUtilities(
@@ -546,7 +546,7 @@ export const extendedShadowsPlugin = plugin(
       },
       {
         values: blurValues,
-      }
+      },
     );
 
     matchUtilities(
@@ -558,7 +558,7 @@ export const extendedShadowsPlugin = plugin(
       {
         values: spreadValues,
         supportsNegativeValues: true,
-      }
+      },
     );
 
     matchUtilities(
@@ -569,7 +569,7 @@ export const extendedShadowsPlugin = plugin(
       },
       {
         values: opacityValues,
-      }
+      },
     );
 
     matchUtilities(
@@ -581,7 +581,7 @@ export const extendedShadowsPlugin = plugin(
       {
         values: scaleValues,
         supportsNegativeValues: true,
-      }
+      },
     );
   },
   {
@@ -663,5 +663,5 @@ export const extendedShadowsPlugin = plugin(
         8: "8",
       },
     },
-  }
+  },
 );

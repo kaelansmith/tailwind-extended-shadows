@@ -15,7 +15,7 @@ describe("inset shadow utilities", () => {
         "--tw-inset-shadow-y-offset: 2px",
         "--tw-inset-shadow-blur: 4px",
         "--tw-inset-shadow-spread: 0px",
-      ])
+      ]),
     ).toBe(true);
 
     const twoXs = getRule(css, "inset-shadow-2xs");
@@ -25,7 +25,7 @@ describe("inset shadow utilities", () => {
         "--tw-inset-shadow-y-offset: 1px",
         "--tw-inset-shadow-blur: 0px",
         "--tw-inset-shadow-spread: 0px",
-      ])
+      ]),
     ).toBe(true);
 
     const xs = getRule(css, "inset-shadow-xs");
@@ -33,7 +33,7 @@ describe("inset shadow utilities", () => {
       ruleIncludes(xs, [
         "--tw-inset-shadow-y-offset: 1px",
         "--tw-inset-shadow-blur: 1px",
-      ])
+      ]),
     ).toBe(true);
 
     const sm = getRule(css, "inset-shadow-sm");
@@ -41,7 +41,7 @@ describe("inset shadow utilities", () => {
       ruleIncludes(sm, [
         "--tw-inset-shadow-y-offset: 2px",
         "--tw-inset-shadow-blur: 4px",
-      ])
+      ]),
     ).toBe(true);
 
     const none = getRule(css, "inset-shadow-none");
@@ -64,16 +64,16 @@ describe("inset shadow utilities", () => {
       content: `<div class="inset-shadow-sm inset-shadow-y-px inset-shadow-blur-0 inset-shadow-spread-0 inset-shadow-x-1"></div>`,
     });
     expect(getRule(css, "inset-shadow-y-px")).toContain(
-      "--tw-inset-shadow-y-offset"
+      "--tw-inset-shadow-y-offset",
     );
     expect(getRule(css, "inset-shadow-blur-0")).toContain(
-      "--tw-inset-shadow-blur"
+      "--tw-inset-shadow-blur",
     );
     expect(getRule(css, "inset-shadow-spread-0")).toContain(
-      "--tw-inset-shadow-spread"
+      "--tw-inset-shadow-spread",
     );
     expect(getRule(css, "inset-shadow-x-1")).toContain(
-      "--tw-inset-shadow-x-offset"
+      "--tw-inset-shadow-x-offset",
     );
   });
 
@@ -85,7 +85,7 @@ describe("inset shadow utilities", () => {
     expect(layers).toContain("--tw-inset-shadow-layers");
     expect(layers).toContain("inset ");
     expect(getRule(css, "inset-shadows-scale-2")).toContain(
-      "--tw-inset-shadows-multiplier"
+      "--tw-inset-shadows-multiplier",
     );
     expect(css).toMatch(/\.inset-shadows-3\.inset-shadows-ease-out/);
   });
@@ -133,7 +133,7 @@ describe("inset shadow utilities", () => {
         "--tw-inset-shadow-y-offset: 1px",
         "--tw-inset-shadow-blur: 0px",
         "--tw-inset-shadow-spread: 0px",
-      ])
+      ]),
     ).toBe(true);
 
     const mid = getRule(css, "inset-shadow-mid");
@@ -141,7 +141,7 @@ describe("inset shadow utilities", () => {
       ruleIncludes(mid, [
         "--tw-inset-shadow-blur: 1px",
         "--tw-inset-shadow-spread: 0px",
-      ])
+      ]),
     ).toBe(true);
   });
 });

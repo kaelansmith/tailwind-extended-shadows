@@ -2,3 +2,4 @@
 .DS_store
 experiment.ts
 .turbo
+package-lock.json

@@ -17,8 +17,9 @@
     "build-ts": "tsc -p tsconfig.json",
     "test": "npm run build && vitest run",
     "test:watch": "vitest",
-    "clean": "rm -rf .turbo && rm -rf dist && npm run clean:modules",
-    "clean:modules": "rm -rf node_modules"
+    "clean": "rm -rf .turbo && rm -rf dist",
+    "clean:modules": "rm -rf node_modules",
+    "typecheck": "tsc --noEmit -p tsconfig.json"
   },
   "repository": {
     "type": "git",

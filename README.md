@@ -385,6 +385,8 @@ module.exports = {
 - `shadows-ease-in` -- scales the shadow layers starting slowly and accelerating towards the end.
 - `shadows-ease-out` -- scales the shadow layers starting fast and decelerating towards the end.
 
+**Single-class form**: `shadows-in-{2-8}` / `shadows-out-{2-8}` (and `inset-shadows-{in,out}-{2-8}`) render the same as `shadows-{n} shadows-ease-{in,out}`, but as one rule. Prefer them when you only need one easing, or inside `@apply`: `shadows-{n}` always emits all three easing rules, and its `.shadows-ease-*` compound selectors can't be applied.
+
 **Configure**: Unfortunately this class group is not configurable via your Tailwind theme, as it requires writing unique JS for each variation to ensure proper easing math is applied.
 
 ---
@@ -425,141 +427,141 @@ With `tailwind-extended-shadows` installed:
 ```css
 .shadow-lg {
   /* The following CSS properties use the .shadow-lg default values */
-  --tw-shadow-x-offset: 0px;
-  --tw-shadow-y-offset: 4px;
-  --tw-shadow-blur: 6px;
-  --tw-shadow-spread: -4px;
-  --tw-shadow-opacity: 1;
-  --tw-shadow-layers: 0 0 #0000;
-  --tw-shadows-multiplier: 1;
-  --tw-shadow-layer-base:
+  --tw-sx: 0px;
+  --tw-sy: 4px;
+  --tw-sb: 6px;
+  --tw-ss: -4px;
+  --tw-so: 1;
+  --tw-sl: 0 0 #0000;
+  --tw-sm: 1;
+  --tw-slb:
     0px 10px 15px -3px var(--tw-shadow-color, rgb(0 0 0 / 0.1)),
-    var(--tw-shadow-x-offset) var(--tw-shadow-y-offset) var(--tw-shadow-blur)
-      var(--tw-shadow-spread) var(--tw-shadow-color, rgb(0 0 0 / 0.1));
-  --tw-shadow: var(--tw-shadow-layer-base);
+    var(--tw-sx) var(--tw-sy) var(--tw-sb)
+      var(--tw-ss) var(--tw-shadow-color, rgb(0 0 0 / 0.1));
+  --tw-shadow: var(--tw-slb);
   box-shadow:
     var(--tw-inset-shadow, 0 0 #0000), var(--tw-ring-offset-shadow, 0 0 #0000),
     var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow);
 }
 .shadow-slate-900\/15 {
   /* adds support for opacity and doesn't set `--tw-shadow` anymore due to re-structure */
-  --tw-shadow-color: rgb(15 23 42 / var(--tw-shadow-opacity, 0.15));
-  --tw-shadow-opacity: 0.15;
+  --tw-shadow-color: rgb(15 23 42 / var(--tw-so, 0.15));
+  --tw-so: 0.15;
 }
 .shadow-y-2 {
-  /* overrides the `--tw-shadow-y-offset` value set by `shadow-lg` */
-  --tw-shadow-y-offset: 0.5rem;
+  /* overrides the `--tw-sy` value set by `shadow-lg` */
+  --tw-sy: 0.5rem;
 }
 .shadow-x-2 {
-  /* overrides the `--tw-shadow-x-offset` value set by `shadow-lg` */
-  --tw-shadow-x-offset: 0.5rem;
+  /* overrides the `--tw-sx` value set by `shadow-lg` */
+  --tw-sx: 0.5rem;
 }
 .-shadow-spread-2 {
-  /* overrides the `--tw-shadow-spread` value set by `shadow-lg` */
-  --tw-shadow-spread: -0.5rem;
+  /* overrides the `--tw-ss` value set by `shadow-lg` */
+  --tw-ss: -0.5rem;
 }
 .shadow-blur-4 {
-  /* overrides the `--tw-shadow-blur` value set by `shadow-lg` */
-  --tw-shadow-blur: 1rem;
+  /* overrides the `--tw-sb` value set by `shadow-lg` */
+  --tw-sb: 1rem;
 }
 .shadows-4 {
-  --tw-shadows-multiplier: 1;
-  --tw-shadow-layers:
-    calc(var(--tw-shadow-x-offset) * var(--tw-shadows-multiplier))
-      calc(var(--tw-shadow-y-offset) * var(--tw-shadows-multiplier))
-      calc(var(--tw-shadow-blur) * var(--tw-shadows-multiplier))
-      var(--tw-shadow-spread) var(--tw-shadow-color, rgb(0 0 0 / 0.1)),
+  --tw-sm: 1;
+  --tw-sl:
+    calc(var(--tw-sx) * var(--tw-sm))
+      calc(var(--tw-sy) * var(--tw-sm))
+      calc(var(--tw-sb) * var(--tw-sm))
+      var(--tw-ss) var(--tw-shadow-color, rgb(0 0 0 / 0.1)),
     calc(
-        var(--tw-shadow-x-offset) * var(--tw-shadows-multiplier) *
-          var(--tw-shadows-multiplier)
+        var(--tw-sx) * var(--tw-sm) *
+          var(--tw-sm)
       )
       calc(
-        var(--tw-shadow-y-offset) * var(--tw-shadows-multiplier) *
-          var(--tw-shadows-multiplier)
+        var(--tw-sy) * var(--tw-sm) *
+          var(--tw-sm)
       )
       calc(
-        var(--tw-shadow-blur) * var(--tw-shadows-multiplier) *
-          var(--tw-shadows-multiplier)
+        var(--tw-sb) * var(--tw-sm) *
+          var(--tw-sm)
       )
-      var(--tw-shadow-spread) var(--tw-shadow-color, rgb(0 0 0 / 0.1)),
+      var(--tw-ss) var(--tw-shadow-color, rgb(0 0 0 / 0.1)),
     calc(
-        var(--tw-shadow-x-offset) * var(--tw-shadows-multiplier) *
-          var(--tw-shadows-multiplier) * var(--tw-shadows-multiplier)
+        var(--tw-sx) * var(--tw-sm) *
+          var(--tw-sm) * var(--tw-sm)
       )
       calc(
-        var(--tw-shadow-y-offset) * var(--tw-shadows-multiplier) *
-          var(--tw-shadows-multiplier) * var(--tw-shadows-multiplier)
+        var(--tw-sy) * var(--tw-sm) *
+          var(--tw-sm) * var(--tw-sm)
       )
       calc(
-        var(--tw-shadow-blur) * var(--tw-shadows-multiplier) *
-          var(--tw-shadows-multiplier) * var(--tw-shadows-multiplier)
+        var(--tw-sb) * var(--tw-sm) *
+          var(--tw-sm) * var(--tw-sm)
       )
-      var(--tw-shadow-spread) var(--tw-shadow-color, rgb(0 0 0 / 0.1));
-  --tw-shadow: var(--tw-shadow-layer-base), var(--tw-shadow-layers);
+      var(--tw-ss) var(--tw-shadow-color, rgb(0 0 0 / 0.1));
+  --tw-shadow: var(--tw-slb), var(--tw-sl);
 }
 .shadows-4.shadows-ease-in {
-  /* overrides the `--tw-shadow-layers` value set by `shadows-4`, applying extra "ease-in" math */
-  --tw-shadow-layers:
+  /* overrides the `--tw-sl` value set by `shadows-4`, applying extra "ease-in" math */
+  --tw-sl:
     calc(
-        calc(var(--tw-shadow-x-offset) * var(--tw-shadows-multiplier)) * 0.25 *
+        calc(var(--tw-sx) * var(--tw-sm)) * 0.25 *
           0.25
       )
       calc(
-        calc(var(--tw-shadow-y-offset) * var(--tw-shadows-multiplier)) * 0.25 *
+        calc(var(--tw-sy) * var(--tw-sm)) * 0.25 *
           0.25
       )
       calc(
-        calc(var(--tw-shadow-blur) * var(--tw-shadows-multiplier)) * 0.25 * 0.25
+        calc(var(--tw-sb) * var(--tw-sm)) * 0.25 * 0.25
       )
-      var(--tw-shadow-spread) var(--tw-shadow-color, rgb(0 0 0 / 0.1)),
+      var(--tw-ss) var(--tw-shadow-color, rgb(0 0 0 / 0.1)),
     calc(
         calc(
-            var(--tw-shadow-x-offset) * var(--tw-shadows-multiplier) *
-              var(--tw-shadows-multiplier)
+            var(--tw-sx) * var(--tw-sm) *
+              var(--tw-sm)
           ) *
           0.5 * 0.5
       )
       calc(
         calc(
-            var(--tw-shadow-y-offset) * var(--tw-shadows-multiplier) *
-              var(--tw-shadows-multiplier)
+            var(--tw-sy) * var(--tw-sm) *
+              var(--tw-sm)
           ) *
           0.5 * 0.5
       )
       calc(
         calc(
-            var(--tw-shadow-blur) * var(--tw-shadows-multiplier) *
-              var(--tw-shadows-multiplier)
+            var(--tw-sb) * var(--tw-sm) *
+              var(--tw-sm)
           ) *
           0.5 * 0.5
       )
-      var(--tw-shadow-spread) var(--tw-shadow-color, rgb(0 0 0 / 0.1)),
+      var(--tw-ss) var(--tw-shadow-color, rgb(0 0 0 / 0.1)),
     calc(
         calc(
-            var(--tw-shadow-x-offset) * var(--tw-shadows-multiplier) *
-              var(--tw-shadows-multiplier) * var(--tw-shadows-multiplier)
+            var(--tw-sx) * var(--tw-sm) *
+              var(--tw-sm) * var(--tw-sm)
           ) *
           0.75 * 0.75
       )
       calc(
         calc(
-            var(--tw-shadow-y-offset) * var(--tw-shadows-multiplier) *
-              var(--tw-shadows-multiplier) * var(--tw-shadows-multiplier)
+            var(--tw-sy) * var(--tw-sm) *
+              var(--tw-sm) * var(--tw-sm)
           ) *
           0.75 * 0.75
       )
       calc(
         calc(
-            var(--tw-shadow-blur) * var(--tw-shadows-multiplier) *
-              var(--tw-shadows-multiplier) * var(--tw-shadows-multiplier)
+            var(--tw-sb) * var(--tw-sm) *
+              var(--tw-sm) * var(--tw-sm)
           ) *
           0.75 * 0.75
       )
-      var(--tw-shadow-spread) var(--tw-shadow-color, rgb(0 0 0 / 0.1));
+      var(--tw-ss) var(--tw-shadow-color, rgb(0 0 0 / 0.1));
 }
 .shadows-scale-3 {
-  /* overrides the `--tw-shadows-multiplier` value set by `shadows-4` */
-  --tw-shadows-multiplier: 3;
+  /* overrides the `--tw-sm` value set by `shadows-4` */
+  --tw-sm: 3;
 }
 ```
 

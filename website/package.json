@@ -1,0 +1,40 @@
+{
+  "name": "tailwind-extended-shadows-website",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "portless",
+    "dev:app": "next dev --webpack",
+    "build": "next build --webpack",
+    "start": "next start -p 3000",
+    "lint": "oxlint --config ../../../../.oxlintrc.json .",
+    "clean": "rm -rf .turbo && rm -rf .next",
+    "clean:modules": "rm -rf node_modules",
+    "typecheck": "tsc --noEmit -p tsconfig.json",
+    "format": "oxfmt --write .",
+    "format:check": "oxfmt --check ."
+  },
+  "type": "module",
+  "dependencies": {
+    "next": "16.3.8",
+    "react": "^19.2.7",
+    "react-dom": "^19.2.7",
+    "server-only": "^0.0.1"
+  },
+  "devDependencies": {
+    "@types/node": "^24.0.0",
+    "@types/react": "^19.2.17",
+    "autoprefixer": "^10.4.0",
+    "oxfmt": "0.71.0",
+    "oxlint": "1.86.0",
+    "portless": "0.15.4",
+    "postcss": "^8.4.38",
+    "tailwind-extended-shadows": "workspace:*",
+    "tailwindcss": "^3.4.4",
+    "typescript": "7.0.2"
+  },
+  "portless": {
+    "name": "extended-shadows",
+    "script": "dev:app"
+  }
+}

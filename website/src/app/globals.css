@@ -1,0 +1,17 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html {
+    @apply bg-zinc-50 text-zinc-800 antialiased;
+  }
+
+  ::selection {
+    @apply bg-indigo-100 text-indigo-950;
+  }
+
+  :focus-visible {
+    @apply outline-none ring-2 ring-indigo-500 ring-offset-2 ring-offset-zinc-50;
+  }
+}

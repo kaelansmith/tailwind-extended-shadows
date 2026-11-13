@@ -19,6 +19,39 @@ for (let i = 0; i <= 100; i += 5) {
     shadowOpacityDefaultTheme[i] = i.toString();
 }
 const BOX_SHADOW_COMPOSITION = `var(--tw-inset-shadow, 0 0 #0000), var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow, 0 0 #0000)`;
+/**
+ * Internal custom properties. Their names are kept short because layered
+ * utilities repeat them many times per rule. `--tw-shadow`, `--tw-shadow-color`
+ * and `--tw-inset-shadow*` stay as-is for compatibility with Tailwind's ring
+ * and shadow conventions.
+ */
+const OUTER_VARS = {
+    x: "--tw-sx",
+    y: "--tw-sy",
+    blur: "--tw-sb",
+    spread: "--tw-ss",
+    opacity: "--tw-so",
+    layers: "--tw-sl",
+    multiplier: "--tw-sm",
+    power: "--tw-sp",
+    base: "--tw-slb",
+    color: "--tw-shadow-color",
+    shadow: "--tw-shadow",
+};
+const INSET_VARS = {
+    x: "--tw-isx",
+    y: "--tw-isy",
+    blur: "--tw-isb",
+    spread: "--tw-iss",
+    opacity: "--tw-iso",
+    layers: "--tw-isl",
+    multiplier: "--tw-ism",
+    power: "--tw-isp",
+    base: "--tw-islb",
+    color: "--tw-inset-shadow-color",
+    shadow: "--tw-inset-shadow",
+};
+const toFactor = (value) => String(+value.toFixed(8));
 /** Default inset shadow geometry (matches Tailwind v3 `shadow-inner` / v4 `inset-shadow-sm`). */
 const INSET_SHADOW_DEFAULTS = {
     x: "0px",
@@ -28,15 +61,15 @@ const INSET_SHADOW_DEFAULTS = {
     color: "rgb(0 0 0 / 0.05)",
 };
 const insetShadowBaseStyles = ({ x = INSET_SHADOW_DEFAULTS.x, y = INSET_SHADOW_DEFAULTS.y, blur = INSET_SHADOW_DEFAULTS.blur, spread = INSET_SHADOW_DEFAULTS.spread, color = INSET_SHADOW_DEFAULTS.color, preBaseShadowValues = "0 0 #0000", } = {}) => ({
-    "--tw-inset-shadow-x-offset": x,
-    "--tw-inset-shadow-y-offset": y,
-    "--tw-inset-shadow-blur": blur,
-    "--tw-inset-shadow-spread": spread,
-    "--tw-inset-shadow-opacity": "1",
-    "--tw-inset-shadow-layers": "0 0 #0000",
-    "--tw-inset-shadows-multiplier": "1",
-    "--tw-inset-shadow-layer-base": `${preBaseShadowValues}, inset var(--tw-inset-shadow-x-offset) var(--tw-inset-shadow-y-offset) var(--tw-inset-shadow-blur) var(--tw-inset-shadow-spread) var(--tw-inset-shadow-color, ${color})`,
-    "--tw-inset-shadow": "var(--tw-inset-shadow-layer-base)",
+    [INSET_VARS.x]: x,
+    [INSET_VARS.y]: y,
+    [INSET_VARS.blur]: blur,
+    [INSET_VARS.spread]: spread,
+    [INSET_VARS.opacity]: "1",
+    [INSET_VARS.layers]: "0 0 #0000",
+    [INSET_VARS.multiplier]: "1",
+    [INSET_VARS.base]: `${preBaseShadowValues}, inset var(${INSET_VARS.x}) var(${INSET_VARS.y}) var(${INSET_VARS.blur}) var(${INSET_VARS.spread}) var(${INSET_VARS.color}, ${color})`,
+    [INSET_VARS.shadow]: `var(${INSET_VARS.base})`,
     "box-shadow": BOX_SHADOW_COMPOSITION,
 });
 exports.extendedShadowsPlugin = plugin(function ({ matchUtilities, theme }) {
@@ -79,40 +112,74 @@ exports.extendedShadowsPlugin = plugin(function ({ matchUtilities, theme }) {
     };
     /**
      * Builds auto-generated shadow layer strings (regular + ease-in + ease-out).
+     * Layer `i` is scaled by multiplier^i, which `powers` precomputes once per
+     * rule (`--tw-sp2: calc(var(--tw-sm) * var(--tw-sm))`, `--tw-sp3: calc(var(--tw-sp2) * var(--tw-sm))`, ...)
+     * so each layer references a single variable.
      */
-    const buildShadowLayers = ({ totalIterations, xVar, yVar, blurVar, spreadVar, colorVar, multiplierVar, inset = false, }) => {
-        let layers = "";
-        let layersEaseIn = "";
-        let layersEaseOut = "";
-        let multiplier = "";
+    const buildShadowLayers = (totalIterations, vars, inset = false) => {
+        const regular = [];
+        const easeIn = [];
+        const easeOut = [];
+        const powers = {};
         const insetPrefix = inset ? "inset " : "";
+        const end = `var(${vars.spread}) var(${vars.color}, rgb(0 0 0 / 0.1))`;
         // note: `shadows-5` means we add 4 additional shadows to the base layer, hence `<` and not `<=` in loop:
         for (let i = 1; i < totalIterations; i++) {
+            let power = `var(${vars.multiplier})`;
             if (i > 1) {
-                layers += ", ";
-                layersEaseIn += ", ";
-                layersEaseOut += ", ";
-                multiplier += " * ";
+                const previous = i === 2 ? power : `var(${vars.power}${i - 1})`;
+                powers[`${vars.power}${i}`] = `calc(${previous} * var(${vars.multiplier}))`;
+                power = `var(${vars.power}${i})`;
             }
-            multiplier += `var(${multiplierVar})`;
-            const x = `calc(var(${xVar}) * ${multiplier})`;
-            const y = `calc(var(${yVar}) * ${multiplier})`;
-            const blur = `calc(var(${blurVar}) * ${multiplier})`;
-            const end = `var(${spreadVar}) var(${colorVar}, rgb(0 0 0 / 0.1))`;
-            layers += `${insetPrefix}${x} ${y} ${blur} ${end}`;
-            let multiplierEaseIn = i / totalIterations;
-            let multiplierEaseOut = (1 - i) / totalIterations;
-            layersEaseIn += insetPrefix;
-            layersEaseOut += insetPrefix;
-            const props = [x, y, blur];
-            props.forEach((val) => {
-                layersEaseIn += `calc(${val} * ${multiplierEaseIn} * ${multiplierEaseIn}) `;
-                layersEaseOut += `calc(${val} * (1 - (${multiplierEaseOut} * ${multiplierEaseOut}))) `;
-            });
-            layersEaseIn += end;
-            layersEaseOut += end;
+            const layer = (factor) => insetPrefix +
+                [vars.x, vars.y, vars.blur]
+                    .map((v) => `calc(var(${v}) * ${power}${factor})`)
+                    .join(" ") +
+                ` ${end}`;
+            const easeInFactor = (i / totalIterations) ** 2;
+            const easeOutFactor = 1 - ((1 - i) / totalIterations) ** 2;
+            regular.push(layer(""));
+            easeIn.push(layer(` * ${toFactor(easeInFactor)}`));
+            easeOut.push(layer(easeOutFactor === 1 ? "" : ` * ${toFactor(easeOutFactor)}`));
         }
-        return { layers, layersEaseIn, layersEaseOut };
+        return {
+            powers,
+            layers: regular.join(", "),
+            layersEaseIn: easeIn.join(", "),
+            layersEaseOut: easeOut.join(", "),
+        };
+    };
+    /**
+     * `shadows-{n}` (with nested `shadows-ease-{in,out}` modifiers) plus the
+     * single-rule `shadows-in-{n}` / `shadows-out-{n}` forms, which only emit the
+     * easing that's used and can be `@apply`-ed.
+     */
+    const layerUtilities = (prefix, vars, inset = false) => {
+        const declarations = (layers, powers) => ({
+            [vars.multiplier]: "1",
+            ...powers,
+            [vars.layers]: layers,
+            [vars.shadow]: `var(${vars.base}), var(${vars.layers})`,
+        });
+        const build = (value) => buildShadowLayers(parseInt(value), vars, inset);
+        return {
+            [prefix]: (value) => {
+                const { powers, layers, layersEaseIn, layersEaseOut } = build(value);
+                return {
+                    ...declarations(layers, powers),
+                    [`&.${prefix}-ease-in`]: { [vars.layers]: layersEaseIn },
+                    [`&.${prefix}-ease-out`]: { [vars.layers]: layersEaseOut },
+                };
+            },
+            [`${prefix}-in`]: (value) => {
+                const { powers, layersEaseIn } = build(value);
+                return declarations(layersEaseIn, powers);
+            },
+            [`${prefix}-out`]: (value) => {
+                const { powers, layersEaseOut } = build(value);
+                return declarations(layersEaseOut, powers);
+            },
+        };
     };
     /**
      * Override built-in shadow-{size} utilities (including shadow-inner) to
@@ -129,8 +196,8 @@ exports.extendedShadowsPlugin = plugin(function ({ matchUtilities, theme }) {
             // Clears outer shadow only — inset is controlled by inset-shadow-none.
             if (value === "none") {
                 return {
-                    "--tw-shadow": "0 0 #0000",
-                    "--tw-shadow-layers": "0 0 #0000",
+                    [OUTER_VARS.shadow]: "0 0 #0000",
+                    [OUTER_VARS.layers]: "0 0 #0000",
                     "box-shadow": BOX_SHADOW_COMPOSITION,
                 };
             }
@@ -154,9 +221,7 @@ exports.extendedShadowsPlugin = plugin(function ({ matchUtilities, theme }) {
                     shadowValues.forEach(({ x, y, blur, spread, color }, i) => {
                         if (i > 0)
                             preBaseShadowValues += ", ";
-                        const colorVar = isInset
-                            ? "--tw-inset-shadow-color"
-                            : "--tw-shadow-color";
+                        const colorVar = isInset ? INSET_VARS.color : OUTER_VARS.color;
                         const insetPrefix = isInset ? "inset " : "";
                         preBaseShadowValues += `${insetPrefix}${x} ${y} ${blur} ${spread} var(${colorVar}, ${color})`;
                     });
@@ -179,15 +244,15 @@ exports.extendedShadowsPlugin = plugin(function ({ matchUtilities, theme }) {
                      * from one of their respective utility classes higher up the tree. If one of these utility classes gets applied
                      * alongside a shadow-{size} class, it will override the defaults because those classes get output after the shadow-{size} classes.
                      */
-                    "--tw-shadow-x-offset": x,
-                    "--tw-shadow-y-offset": y,
-                    "--tw-shadow-blur": blur,
-                    "--tw-shadow-spread": spread,
-                    "--tw-shadow-opacity": "1",
-                    "--tw-shadow-layers": "0 0 #0000",
-                    "--tw-shadows-multiplier": "1",
-                    "--tw-shadow-layer-base": `${preBaseShadowValues}, var(--tw-shadow-x-offset) var(--tw-shadow-y-offset) var(--tw-shadow-blur) var(--tw-shadow-spread) var(--tw-shadow-color, ${color})`,
-                    "--tw-shadow": "var(--tw-shadow-layer-base)",
+                    [OUTER_VARS.x]: x,
+                    [OUTER_VARS.y]: y,
+                    [OUTER_VARS.blur]: blur,
+                    [OUTER_VARS.spread]: spread,
+                    [OUTER_VARS.opacity]: "1",
+                    [OUTER_VARS.layers]: "0 0 #0000",
+                    [OUTER_VARS.multiplier]: "1",
+                    [OUTER_VARS.base]: `${preBaseShadowValues}, var(${OUTER_VARS.x}) var(${OUTER_VARS.y}) var(${OUTER_VARS.blur}) var(${OUTER_VARS.spread}) var(${OUTER_VARS.color}, ${color})`,
+                    [OUTER_VARS.shadow]: `var(${OUTER_VARS.base})`,
                     "box-shadow": BOX_SHADOW_COMPOSITION,
                 };
             }
@@ -199,12 +264,12 @@ exports.extendedShadowsPlugin = plugin(function ({ matchUtilities, theme }) {
     const themeShadowColors = theme("boxShadowColor");
     matchUtilities({
         shadow: (value, { modifier }) => {
-            const { color, defaultOpacityValue } = resolveShadowColor(value, modifier, "--tw-shadow-opacity");
+            const { color, defaultOpacityValue } = resolveShadowColor(value, modifier, OUTER_VARS.opacity);
             return {
-                "--tw-shadow-color": color,
-                "--tw-shadow-opacity": `${defaultOpacityValue}`,
+                [OUTER_VARS.color]: color,
+                [OUTER_VARS.opacity]: `${defaultOpacityValue}`,
                 // have to set "--tw-shadow" again here to override built-in Tailwind stuff
-                "--tw-shadow": `var(--tw-shadow-layer-base), var(--tw-shadow-layers, 0 0 #0000)`,
+                [OUTER_VARS.shadow]: `var(${OUTER_VARS.base}), var(${OUTER_VARS.layers}, 0 0 #0000)`,
             };
         },
     }, {
@@ -217,31 +282,7 @@ exports.extendedShadowsPlugin = plugin(function ({ matchUtilities, theme }) {
      *  Note: `shadows-ease-{in,out}` utilities are also specified here as nested properties
      */
     const layerValues = theme("boxShadowLayers");
-    matchUtilities({
-        shadows: (value) => {
-            const totalIterations = parseInt(value);
-            const { layers, layersEaseIn, layersEaseOut } = buildShadowLayers({
-                totalIterations,
-                xVar: "--tw-shadow-x-offset",
-                yVar: "--tw-shadow-y-offset",
-                blurVar: "--tw-shadow-blur",
-                spreadVar: "--tw-shadow-spread",
-                colorVar: "--tw-shadow-color",
-                multiplierVar: "--tw-shadows-multiplier",
-            });
-            return {
-                "--tw-shadows-multiplier": "1",
-                "--tw-shadow-layers": layers,
-                "--tw-shadow": `var(--tw-shadow-layer-base), var(--tw-shadow-layers)`,
-                "&.shadows-ease-in": {
-                    "--tw-shadow-layers": layersEaseIn,
-                },
-                "&.shadows-ease-out": {
-                    "--tw-shadow-layers": layersEaseOut,
-                },
-            };
-        },
-    }, {
+    matchUtilities(layerUtilities("shadows", OUTER_VARS), {
         values: layerValues,
     });
     /**
@@ -250,10 +291,10 @@ exports.extendedShadowsPlugin = plugin(function ({ matchUtilities, theme }) {
     const offsetValues = theme("boxShadowOffset");
     matchUtilities({
         "shadow-x": (value) => ({
-            "--tw-shadow-x-offset": `${value}`,
+            [OUTER_VARS.x]: `${value}`,
         }),
         "shadow-y": (value) => ({
-            "--tw-shadow-y-offset": `${value}`,
+            [OUTER_VARS.y]: `${value}`,
         }),
     }, {
         values: offsetValues,
@@ -265,7 +306,7 @@ exports.extendedShadowsPlugin = plugin(function ({ matchUtilities, theme }) {
     const blurValues = theme("boxShadowBlur");
     matchUtilities({
         "shadow-blur": (value) => ({
-            "--tw-shadow-blur": `${value}`,
+            [OUTER_VARS.blur]: `${value}`,
         }),
     }, {
         values: blurValues,
@@ -276,7 +317,7 @@ exports.extendedShadowsPlugin = plugin(function ({ matchUtilities, theme }) {
     const spreadValues = theme("boxShadowSpread");
     matchUtilities({
         "shadow-spread": (value) => ({
-            "--tw-shadow-spread": `${value}`,
+            [OUTER_VARS.spread]: `${value}`,
         }),
     }, {
         values: spreadValues,
@@ -288,7 +329,7 @@ exports.extendedShadowsPlugin = plugin(function ({ matchUtilities, theme }) {
     const opacityValues = theme("boxShadowOpacity");
     matchUtilities({
         "shadow-opacity": (value) => ({
-            "--tw-shadow-opacity": `${parseInt(value) / 100}`,
+            [OUTER_VARS.opacity]: `${parseInt(value) / 100}`,
         }),
     }, {
         values: opacityValues,
@@ -299,7 +340,7 @@ exports.extendedShadowsPlugin = plugin(function ({ matchUtilities, theme }) {
     const scaleValues = theme("boxShadowLayersScale");
     matchUtilities({
         "shadows-scale": (value) => ({
-            "--tw-shadows-multiplier": `${value}`,
+            [OUTER_VARS.multiplier]: `${value}`,
         }),
     }, {
         values: scaleValues,
@@ -316,8 +357,8 @@ exports.extendedShadowsPlugin = plugin(function ({ matchUtilities, theme }) {
         "inset-shadow": (value) => {
             if (value === "none") {
                 return {
-                    "--tw-inset-shadow": "0 0 #0000",
-                    "--tw-inset-shadow-layers": "0 0 #0000",
+                    [INSET_VARS.shadow]: "0 0 #0000",
+                    [INSET_VARS.layers]: "0 0 #0000",
                     "box-shadow": BOX_SHADOW_COMPOSITION,
                 };
             }
@@ -331,7 +372,7 @@ exports.extendedShadowsPlugin = plugin(function ({ matchUtilities, theme }) {
                     shadowValues.forEach(({ x, y, blur, spread, color }, i) => {
                         if (i > 0)
                             preBaseShadowValues += ", ";
-                        preBaseShadowValues += `inset ${x} ${y} ${blur} ${spread} var(--tw-inset-shadow-color, ${color})`;
+                        preBaseShadowValues += `inset ${x} ${y} ${blur} ${spread} var(${INSET_VARS.color}, ${color})`;
                     });
                 }
                 const { x, y, blur, spread, color } = lastBaseShadowValue;
@@ -351,11 +392,11 @@ exports.extendedShadowsPlugin = plugin(function ({ matchUtilities, theme }) {
     });
     matchUtilities({
         "inset-shadow": (value, { modifier }) => {
-            const { color, defaultOpacityValue } = resolveShadowColor(value, modifier, "--tw-inset-shadow-opacity");
+            const { color, defaultOpacityValue } = resolveShadowColor(value, modifier, INSET_VARS.opacity);
             return {
-                "--tw-inset-shadow-color": color,
-                "--tw-inset-shadow-opacity": `${defaultOpacityValue}`,
-                "--tw-inset-shadow": `var(--tw-inset-shadow-layer-base), var(--tw-inset-shadow-layers, 0 0 #0000)`,
+                [INSET_VARS.color]: color,
+                [INSET_VARS.opacity]: `${defaultOpacityValue}`,
+                [INSET_VARS.shadow]: `var(${INSET_VARS.base}), var(${INSET_VARS.layers}, 0 0 #0000)`,
             };
         },
     }, {
@@ -363,40 +404,15 @@ exports.extendedShadowsPlugin = plugin(function ({ matchUtilities, theme }) {
         modifiers: "any",
         type: ["color"],
     });
-    matchUtilities({
-        "inset-shadows": (value) => {
-            const totalIterations = parseInt(value);
-            const { layers, layersEaseIn, layersEaseOut } = buildShadowLayers({
-                totalIterations,
-                xVar: "--tw-inset-shadow-x-offset",
-                yVar: "--tw-inset-shadow-y-offset",
-                blurVar: "--tw-inset-shadow-blur",
-                spreadVar: "--tw-inset-shadow-spread",
-                colorVar: "--tw-inset-shadow-color",
-                multiplierVar: "--tw-inset-shadows-multiplier",
-                inset: true,
-            });
-            return {
-                "--tw-inset-shadows-multiplier": "1",
-                "--tw-inset-shadow-layers": layers,
-                "--tw-inset-shadow": `var(--tw-inset-shadow-layer-base), var(--tw-inset-shadow-layers)`,
-                "&.inset-shadows-ease-in": {
-                    "--tw-inset-shadow-layers": layersEaseIn,
-                },
-                "&.inset-shadows-ease-out": {
-                    "--tw-inset-shadow-layers": layersEaseOut,
-                },
-            };
-        },
-    }, {
+    matchUtilities(layerUtilities("inset-shadows", INSET_VARS, true), {
         values: layerValues,
     });
     matchUtilities({
         "inset-shadow-x": (value) => ({
-            "--tw-inset-shadow-x-offset": `${value}`,
+            [INSET_VARS.x]: `${value}`,
         }),
         "inset-shadow-y": (value) => ({
-            "--tw-inset-shadow-y-offset": `${value}`,
+            [INSET_VARS.y]: `${value}`,
         }),
     }, {
         values: offsetValues,
@@ -404,14 +420,14 @@ exports.extendedShadowsPlugin = plugin(function ({ matchUtilities, theme }) {
     });
     matchUtilities({
         "inset-shadow-blur": (value) => ({
-            "--tw-inset-shadow-blur": `${value}`,
+            [INSET_VARS.blur]: `${value}`,
         }),
     }, {
         values: blurValues,
     });
     matchUtilities({
         "inset-shadow-spread": (value) => ({
-            "--tw-inset-shadow-spread": `${value}`,
+            [INSET_VARS.spread]: `${value}`,
         }),
     }, {
         values: spreadValues,
@@ -419,14 +435,14 @@ exports.extendedShadowsPlugin = plugin(function ({ matchUtilities, theme }) {
     });
     matchUtilities({
         "inset-shadow-opacity": (value) => ({
-            "--tw-inset-shadow-opacity": `${parseInt(value) / 100}`,
+            [INSET_VARS.opacity]: `${parseInt(value) / 100}`,
         }),
     }, {
         values: opacityValues,
     });
     matchUtilities({
         "inset-shadows-scale": (value) => ({
-            "--tw-inset-shadows-multiplier": `${value}`,
+            [INSET_VARS.multiplier]: `${value}`,
         }),
     }, {
         values: scaleValues,

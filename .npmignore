@@ -6,3 +6,4 @@ vitest.config.ts
 .vscode
 experiment.ts
 TODO.md
+/website
